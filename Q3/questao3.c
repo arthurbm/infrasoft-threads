@@ -15,7 +15,7 @@ enum terrain {
 	wall,
 	empty,
 	goal,
-	crumb
+	path
 };
 
 // Alocar memória para a matriz maze
@@ -76,7 +76,7 @@ void add_crumbs()
 	int i, j;
 	for (i = 0; i < rows; ++i) {
 		for (j = 0; j < cols; ++j) {
-			if (maze[i][j] == crumb) {
+			if (maze[i][j] == path) {
 				maze[i][j] = 5;
 			}
 		}
@@ -95,19 +95,19 @@ int dfs(int row, int col)
 		*current = wall;
 
 		if (dfs(row, col - 1)){
-			*current = crumb;
+			*current = path;
 			return 1;
 		} 
 		if (dfs(row + 1, col)){
-			*current = crumb;
+			*current = path;
 			return 1;
 		} 
 		if (dfs(row, col + 1)){
-			*current = crumb;
+			*current = path;
 			return 1;		
 		} 
 		if (dfs(row - 1, col)){
-			*current = crumb;
+			*current = path;
 			return 1;
 		}
 	}
