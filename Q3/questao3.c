@@ -7,33 +7,23 @@ int column_start_pos = 1;
 int row_end_pos = 10;
 int column_end_pos = 18;
 
-char** maze;
-int** visited;
+int** maze;
 int rows = 12;
 int cols = 20;
 
 enum terrain {
-	empty,
 	wall,
+	empty,
 	goal,
 	crumb
 };
 
-// Alocar memória para a matriz visited
-void alloc_visited()
-{
-	visited = malloc(rows * sizeof(int*));
-	for (int i = 0; i < rows; ++i){
-		visited[i] = malloc(cols * sizeof(int*));
-	}
-}
-
 // Alocar memória para a matriz maze
 void alloc_maze()
 {
-	maze = malloc(rows * sizeof(char*));
+	maze = malloc(rows * sizeof(int*));
 	for (int i = 0; i < rows; ++i){
-		maze[i] = malloc(cols * sizeof(char*));
+		maze[i] = malloc(cols * sizeof(int*));
 	}
 }
 
@@ -55,40 +45,26 @@ void get_maze(char* file_name)
 				matrix_value = getc(maze_file);
 			}
 
-			maze[i][j] = matrix_value;
+      if (matrix_value == '0') {
+				maze[i][j] = wall;
+			} else {
+				maze[i][j] = empty;
+			}
+      // Define goal
+      maze[row_end_pos][column_end_pos] = goal;
+      
 		}
 	}
 
 	fclose(maze_file);
 }
 
-// Inicializar a matriz auxiliar visited
-void init_visited()
-{
-	alloc_visited();
-
-
-	int i, j;
-	for (i = 0; i < rows; ++i) {
-		for (j = 0; j < cols; ++j) {
-			if (maze[i][j] == '0') {
-				visited[i][j] = wall;
-			} else {
-				visited[i][j] = empty;
-			}
-		}
-	}
-
-  // Define goal
-  visited[row_end_pos][column_end_pos] = goal;
-}	
-
 void print_maze()
 {
 	int i, j;
 	for (i = 0; i < rows; ++i) {
 		for (j = 0; j < cols; ++j) {
-			printf("%c", maze[i][j]);
+			printf("%d", maze[i][j]);
 		}
 		printf("\n");
 	}	
@@ -100,8 +76,8 @@ void add_crumbs()
 	int i, j;
 	for (i = 0; i < rows; ++i) {
 		for (j = 0; j < cols; ++j) {
-			if (visited[i][j] == crumb) {
-				maze[i][j] = '.';
+			if (maze[i][j] == crumb) {
+				maze[i][j] = 5;
 			}
 		}
 	}
@@ -109,7 +85,7 @@ void add_crumbs()
 
 int dfs(int row, int col)
 {
-	int* current = &visited[row][col];
+	int* current = &maze[row][col];
 
 	if (*current == goal) {
 		return 1;
@@ -139,6 +115,7 @@ int dfs(int row, int col)
 	return 0;
 }
 
+// O caminho é preenchido com números 5 e a posição final vira um 2
 int main()
 {
 
@@ -149,7 +126,6 @@ int main()
   // pthread_join(threads[0], NULL);
 
   get_maze("maze.txt");
-	init_visited();
 
   printf("Matriz inicial:\n\n");
 	print_maze();
