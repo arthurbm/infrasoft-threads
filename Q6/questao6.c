@@ -60,20 +60,28 @@ int main(){
     int *idsE[threads_escritoras]; // idsE[M] = ID das threads escritoras
     int *idsL[threads_leitoras]; // idsL[N] = ID das trheads leitoras
 
-    for(int i = 0; i < threads_escritoras; i++){
-        idsE[i] = (int*) malloc(sizeof(int));
-        *idsE[i] = i;
-        if(pthread_create(&escritoras[i], NULL, &escrita, (void*)idsE[i]) != 0)
+    for(int count1 = 0; count1 < threads_escritoras; count1++){
+        idsE[count1] = (int*) malloc(sizeof(int));
+        *idsE[count1] = count1;
+        if(pthread_create(&escritoras[count1], NULL, &escrita, (void*)idsE[count1]) != 0)
             printf("Falha na criação da thread");
     } 
-    for(int i = 0; i < threads_leitoras; i++){
-        idsL[i] = (int*) malloc(sizeof(int));
-        *idsL[i] = i;
-        if(pthread_create(&leitoras[i], NULL, &leitura, (void*)idsL[i]) != 0)
+    for(int count2 = 0; count2 < threads_leitoras; count2++){
+        idsL[count2] = (int*) malloc(sizeof(int));
+        *idsL[count2] = count2;
+        if(pthread_create(&leitoras[count2], NULL, &leitura, (void*)idsL[count2]) != 0)
             printf("Falha na criação da thread");
     }
-
     pthread_exit(NULL);
+
+    //Libera o vetor de ID's
+    for(int count3 = 0; count3 < threads_escritoras; count3++)
+        free(idsE[count3]);
+
+    for(int count4 = 0; count4 < threads_leitoras; count4++)
+        free(idsL[count4]);
+
     free(informacoes);
+
     return 0;
 }
