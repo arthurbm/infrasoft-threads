@@ -19,7 +19,7 @@ void *leitura(void *arg){
     int pos; //variável que indicará qual a posição do banco de informações para acesso e exibição
     int i = 0;
     do { //Assim como as threads escritoras, todas threads leitoras funcionaram dentro de um while para que assim elas possam ler o array 'informacoes' continuamente
-        pthread_mutex_lock(&mutex); //Travamos o mutex para garantir que uma única thread escritora está escrevendo no banco de Dados
+        pthread_mutex_lock(&mutex); //Travamos o mutex para garantir que uma única thread leitora está escrevendo no banco de Dados
 
         pos = rand()%(tamanho); // posição aleatoria para que a thread leitora acesse no vetor 'informacoes'
         printf("A Thread leitora de ID [%d] leu a posição [%d] do Banco de Informações: %d\n", threadID, pos, informacoes[pos]);
@@ -28,7 +28,7 @@ void *leitura(void *arg){
             i = -1;
         else
             i++;
-        pthread_mutex_unlock(&mutex); //Liberamos o mutex para que outra thread escritora possa acrescentar algo no banco de informacoes
+        pthread_mutex_unlock(&mutex); //Liberamos o mutex para que outra thread leitora possa acrescentar algo no banco de informacoes
     // Para checar não sendo um um loop infinito, substitua 1 por i != 0
     } while(i != 0);
 }
@@ -37,7 +37,7 @@ void *escrita(void *arg){
     int i = 0;
     // Coloquei um número alto e diferente, para visualizar o último elemento escrito por uma thread
     do {
-       pthread_mutex_lock(&mutex); //Travamos o mutex para garantir que uma única thread escritora está escrevendo no banco de Dados
+        pthread_mutex_lock(&mutex); //Travamos o mutex para garantir que uma única thread escritora está escrevendo no banco de Dados
         printf("A Thread escritora de ID [%d] está escrevendo no Banco de Informações\n", threadID);
         // Na prática, cada thread dará 6 iterações
         if(i >= (5))
