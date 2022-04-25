@@ -1,0 +1,16 @@
+Modificações projeto de threads:
+
+Questão 6:
+	- Coloquei um mutex na thread leitora para evitar que haja escrita ao mesmo tempo que leitura
+	- Conserte a posição de acesso à leitura, trocando de "tamanho + 1" para "tamanho"
+	- Retirei a flag
+	- Ajustei o loop para ficar mais legível, troquei para um do while em que o contador volta até 0
+
+Questão 3:
+	- Consegui fazer a questão 3 funcionar, porém não consegui implementa-la com threads
+	- Meu pensamento para implementa-la com threads era usar uma thread para cada sentido da matriz (cima, baixo, esquerda e direita), para ir mapeando os vizinhos já visitados, marcando o caminho e guardando isso em uma variável global externa.
+	
+Questão 9:
+	- Não consegui implementar a tempo usando threads
+	- O meu plano para a questão havia sido o seguinte, como descrito na questão:
+		- A intenção é fazer o crivo, e pegar os dois vetores, um booleano para dizer se o número é primo ou não, e outro para ver se a posição já foi checada por alguma thread. Ao achar um primo, ele será jogado numa fila, e as threads vão tirando eles da fila e os processando
